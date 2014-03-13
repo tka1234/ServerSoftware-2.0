@@ -7,21 +7,16 @@ public class Display extends JFrame {
 		mainPanel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		try {UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); }
 		catch (Exception E) {E.printStackTrace(); }
-		
 		Output = new JLabel();
 		mainPanel.add(Output);
-		
 		ToggleStart = new JButton("Start/Stop");
 		ToggleStart.addActionListener(new OSDListener());
 		mainPanel.add(ToggleStart);
-		
 		TaskBar = new JProgressBar();
 		TaskBar.setMaximum(100);
 		mainPanel.add(TaskBar);
-		
 		Status = new JLabel("Loading server...");
 		mainPanel.add(Status);
-		
 		setContentPane(mainPanel);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
@@ -32,10 +27,8 @@ public class Display extends JFrame {
 	public JLabel Output, Status;
 	public JButton ToggleStart;
 	public JProgressBar TaskBar;
-	
 	private class OSDListener implements ActionListener {
 		public void actionPerformed(ActionEvent event) {
-			System.out.println("Potato!");
-		} }
-
-}
+			if (Thread.override) Thread.override = false;
+			else Thread.override = true;
+			Thread.log.write("Override State set to " + Thread.override); } } }

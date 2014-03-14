@@ -13,7 +13,7 @@ public class Thread {
 		
 		log = new Log();
 		boolean serverRunning = false;
-		log.write("Server set to default state: off");
+		log.write("Server set to default state: offline.");
 		
 		try {
 			Scanner in = new Scanner(new File("Schedule.txt"));
@@ -30,25 +30,31 @@ public class Thread {
 		log.write("Loading finished.");
 		log.write("Main loop initialized.");
 		int currentDay = 0;
+		boolean initialCheck = false;
 		while (true) {
-			if (currentHour() < offTimeHour) serverRunning = true;
-			else if (currentHour() == offTimeHour && currentMinute() < offTimeMinute) serverRunning = true;
-			else if (currentHour() < onTimeHour) serverRunning = false;
-			else if (currentHour() == onTimeHour && currentMinute() < onTimeMinute) serverRunning = false;
-			
+			initialCheck = serverRunning;
+			if ((currentHour() * 60) + currentMinute() >= (onTimeHour * 60) + onTimeMinute && (currentHour() * 60) + currentMinute() < (offTimeHour * 60) + offTimeMinute) serverRunning = true;
+			else serverRunning = false;
 			if (override) serverRunning = true;
-		
-			if (serverRunning) x.Status.setText("The server is currently running.");
-			else x.Status.setText("The server is off and hibernating.");
+			if (initialCheck != serverRunning && !override) {
+				if (serverRunning) {
+					log.write("The server was switched on automatically.");
+					//TODO command to start the server
+					//runCommand("java -jar F:/TST/Flatspace.jar");
+				}
+				else {
+					log.write("The server was switched off automatically.");
+					//TODO command to kill the server
+				} }
+			if (serverRunning) x.Status.setText("The server is currently online.");
+			else x.Status.setText("The server is currently offline.");
 			
 			if (currentDay() != currentDay) {
 				currentDay = currentDay();
 				log.write(" ");
-				log.write(currentMonth() + "/" + currentDay() + "/" + currentYear() + " -");
-			}
+				log.write(currentMonth() + "/" + currentDay() + "/" + currentYear() + " -"); }
+			
 		}
-		
-		//runCommand("java -jar F:/TST/Flatspace.jar");
 	}
 	
 	public static void runCommand(String s) {
